@@ -1,0 +1,52 @@
+<app-navbar></app-navbar>
+
+<div class="Top upload-btn-wrapper input-group">
+    <button class="btn-c">Upload a file</button>
+    <input type="file" (change)="onFileSelected($event)" name="myfile" id = "ref-func"/>
+</div>  
+
+<div class="Container" id = "ref">
+    <div class="Left">
+      <iframe *ngIf="ifgranted" [src]="pdfURL" height="100%" width="100%"
+              frameborder="0" style="overflow:hidden;height:100%;width:100%" allowfullscreen webkitallowfullscreen>
+      </iframe> 
+    </div>
+      <div class="Right" id = "ref">
+          <div [hidden]="submitted" class="form-group" *ngIf = "tbgranted">
+              <form (ngSubmit)="onSubmit()" #tbldata = "ngForm" >
+                <table class="table table-striped table-bordered" *ngIf="tableData" style="table-layout: auto;width: 100%;">
+                    <thead>
+                      <tr>
+                          <th>Characteristics</th>
+                          <th>Value</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let tbld of tableData; let in = index;">
+                          <td >{{tbld.entityName}}</td>
+                          <td>
+                              <select class="form-control" required name= "nam-{{tbld.entity[in]}}"
+                                      [(ngModel)]="resData[in]" *ngIf="resData[in] != 'other'" >  
+                                  <option *ngFor="let tbl of tbld.entity" 
+                                          [value]="tbl" >{{tbl}}</option>  
+                              </select> 
+                              <input type="text" class="form-control" required name="othernam-{{tbld.entity[in]}}"
+                                     [(ngModel)]="resData1[in]" *ngIf="resData[in] == 'other'" > 
+                              
+                          </td>
+                        </tr>
+                  </tbody>
+                </table>
+                <button type="submit" class="btn btn-success" 
+                        [disabled]="!tbldata.form.valid">Submit</button>
+              </form>
+              </div>
+              <div class="form-group" [hidden]="!submitted">
+                  <h2>You submitted the following:</h2>
+                  <div *ngFor="let rd of resData" class="row">
+                    <div >{{ rd }}</div>
+                  </div>
+                  <button class="btn btn-primary" (click)="submitted=false">BACK</button>
+              </div>
+      </div>
+</div>
